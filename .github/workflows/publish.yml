@@ -1,0 +1,40 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Get date tag
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d%H')"
+
+      - name: Build and push Docker image (node-lts-alpine.chromium)
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Node-lts+Chromium/Dockerfile
+          push: true
+          tags: |
+            adrielcodeco/node-lts-alpine.chromium:latest
+            adrielcodeco/node-lts-alpine.chromium:${{ steps.date.outputs.date }}
