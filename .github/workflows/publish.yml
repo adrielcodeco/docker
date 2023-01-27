@@ -28,13 +28,8 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('Dockerfile') }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-${{ hashFiles('Dockerfile') }}
+      - name: cache driver
+        run: docker buildx create --use --driver=docker-container
 
       - name: Get date tag
         id: date
@@ -46,6 +41,8 @@ jobs:
           context: .
           file: Node-lts+Chromium/Dockerfile
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           tags: |
             adrielcodeco/node-lts-alpine.chromium:latest
@@ -57,7 +54,22 @@ jobs:
           context: .
           file: conformance-suite/Dockerfile
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           tags: |
             adrielcodeco/conformance-suite:latest
             adrielcodeco/conformance-suite:${{ steps.date.outputs.date }}
+
+      - name: Build and push Docker image (obb-certification)
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: obb-certification/Dockerfile
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            adrielcodeco/obb-certification:latest
+            adrielcodeco/obb-certification:${{ steps.date.outputs.date }}
