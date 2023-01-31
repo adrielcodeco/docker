@@ -1,9 +1,22 @@
 name: Publish Docker image
 
 on:
+  schedule:
+    - cron: '0 2 * * *' # run at 2 AM UTC
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Image'
+        required: true
+        default: 'conformance-suite'
+        type: choice
+        options:
+          - node-lts-chromium
+          - conformance-suite
+          - obb-certification
 
 jobs:
   push_to_registry:
@@ -37,6 +50,7 @@ jobs:
 
       - name: Build and push Docker image (node-lts-alpine.chromium)
         uses: docker/build-push-action@v3
+        if: ${{ inputs.image == null || inputs.image == 'node-lts-chromium' }}
         with:
           context: .
           file: Node-lts+Chromium/Dockerfile
@@ -50,6 +64,7 @@ jobs:
 
       - name: Build and push Docker image (conformance-suite)
         uses: docker/build-push-action@v3
+        if: ${{ inputs.image == null || inputs.image == 'conformance-suite' }}
         with:
           context: .
           file: conformance-suite/Dockerfile
@@ -63,6 +78,7 @@ jobs:
 
       - name: Build and push Docker image (obb-certification)
         uses: docker/build-push-action@v3
+        if: ${{ inputs.image == null || inputs.image == 'obb-certification' }}
         with:
           context: .
           file: obb-certification/Dockerfile
