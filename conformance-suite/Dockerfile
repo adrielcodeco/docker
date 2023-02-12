@@ -14,7 +14,9 @@ RUN apt-get update
 RUN apt-get install -y \
         redir \
         apache2 \
-        ssl-cert
+        ssl-cert \
+        curl \
+        wget
 RUN apt-get clean
 
 COPY --from=builder /usr/src/conformance-suite/target  /server
