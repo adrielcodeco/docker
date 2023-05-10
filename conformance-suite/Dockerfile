@@ -4,9 +4,9 @@ WORKDIR /usr/src/conformance-suite
 
 RUN git clone https://gitlab.com/openid/conformance-suite.git .
 
-RUN mvn -B clean package
+RUN mvn --batch-mode --quiet clean package
 
-FROM openjdk:11-jdk-slim
+FROM openjdk:21-jdk-slim-bullseye
 
 WORKDIR /usr/src/conformance-suite
 
