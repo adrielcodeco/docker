@@ -10,14 +10,14 @@ FROM openjdk:21-jdk-slim-bullseye
 
 WORKDIR /usr/src/conformance-suite
 
-RUN apt-get update
-RUN apt-get install -y \
+RUN apt-get -qq update
+RUN apt-get -qq install -y \
         redir \
         apache2 \
         ssl-cert \
         curl \
         wget
-RUN apt-get clean
+RUN apt-get -qq clean
 
 COPY --from=builder /usr/src/conformance-suite/target  /server
 COPY conformance-suite/suite-caller.sh suite-caller.sh
