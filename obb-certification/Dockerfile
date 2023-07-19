@@ -4,9 +4,9 @@ WORKDIR /usr/src/obb-certification
 
 RUN git clone https://gitlab.com/obb1/certification.git .
 
-RUN mvn -B clean package
+RUN mvn --batch-mode --quiet -B -Dmaven.test.skip -Dpmd.skip clean package
 
-FROM openjdk:11-jdk-slim
+FROM openjdk:21-jdk-slim-bullseye
 
 WORKDIR /usr/src/obb-certification
 
@@ -19,8 +19,8 @@ RUN apt-get -qq install -y \
         wget
 RUN apt-get -qq clean
 
-COPY --from=builder /usr/src/obb-certification/target  /server
-COPY obb-certification/suite-caller.sh suite-caller.sh
+COPY --from=builder /usr/src/obb-certification/target/fapi-test-suite.jar           /server/fapi-test-suite.jar
+COPY obb-certification/suite-caller.sh                                              suite-caller.sh
 
 RUN chmod u+x suite-caller.sh
 ENV BASE_URL https://localhost.emobix.co.uk:8443

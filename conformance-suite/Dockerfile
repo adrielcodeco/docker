@@ -19,7 +19,7 @@ RUN apt-get -qq install -y \
         wget
 RUN apt-get -qq clean
 
-COPY --from=builder /usr/src/conformance-suite/target/fapi-test-suite.jar           /server
+COPY --from=builder /usr/src/conformance-suite/target/fapi-test-suite.jar           /server/fapi-test-suite.jar
 COPY conformance-suite/suite-caller.sh                                              suite-caller.sh
 
 RUN chmod u+x suite-caller.sh
