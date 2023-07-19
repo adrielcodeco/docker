@@ -1,0 +1,1 @@
+docker build -t conformance-suite:latest . -f Dockerfile

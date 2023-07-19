@@ -1,0 +1,1 @@
+docker build -t obb-certification:latest . -f Dockerfile

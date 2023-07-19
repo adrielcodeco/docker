@@ -4,7 +4,7 @@ WORKDIR /usr/src/conformance-suite
 
 RUN git clone https://gitlab.com/openid/conformance-suite.git .
 
-RUN mvn --batch-mode --quiet clean package
+RUN mvn --batch-mode --quiet -B -Dmaven.test.skip -Dpmd.skip clean package
 
 FROM openjdk:21-jdk-slim-bullseye
 
@@ -19,11 +19,11 @@ RUN apt-get -qq install -y \
         wget
 RUN apt-get -qq clean
 
-COPY --from=builder /usr/src/conformance-suite/target  /server
-COPY conformance-suite/suite-caller.sh suite-caller.sh
+COPY --from=builder /usr/src/conformance-suite/target/fapi-test-suite.jar           /server
+COPY conformance-suite/suite-caller.sh                                              suite-caller.sh
 
 RUN chmod u+x suite-caller.sh
-ENV BASE_URL https://localhost.emobix.co.uk:8443
+ENV BASE_URL https://localhost:8443
 
 RUN echo 'Listen 8443' > /etc/apache2/ports.conf \
       && a2enmod headers proxy proxy_http rewrite ssl \

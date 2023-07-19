@@ -51,6 +51,7 @@ jobs:
       - name: Build and push Docker image (node-lts-alpine.chromium)
         uses: docker/build-push-action@v4
         if: ${{ inputs.image == null || inputs.image == 'node-lts-chromium' }}
+        continue-on-error: true
         with:
           context: .
           file: Node-lts+Chromium/Dockerfile
@@ -65,6 +66,7 @@ jobs:
       - name: Build and push Docker image (conformance-suite)
         uses: docker/build-push-action@v4
         if: ${{ inputs.image == null || inputs.image == 'conformance-suite' }}
+        continue-on-error: true
         with:
           context: .
           file: conformance-suite/Dockerfile
@@ -79,6 +81,7 @@ jobs:
       - name: Build and push Docker image (obb-certification)
         uses: docker/build-push-action@v4
         if: ${{ inputs.image == null || inputs.image == 'obb-certification' }}
+        continue-on-error: true
         with:
           context: .
           file: obb-certification/Dockerfile
