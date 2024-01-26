@@ -24,6 +24,7 @@ COPY conformance-suite/suite-caller.sh                                          
 
 RUN chmod u+x suite-caller.sh
 ENV BASE_URL https://localhost:8443
+ENV MONGODB_HOST mongodb
 
 RUN echo 'Listen 8443' > /etc/apache2/ports.conf \
       && a2enmod headers proxy proxy_http rewrite ssl \
