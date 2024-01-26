@@ -1,10 +1,10 @@
-FROM maven:3-jdk-11 AS builder
+FROM maven:3-openjdk-17 AS builder
 
 WORKDIR /usr/src/conformance-suite
 
 RUN git clone https://gitlab.com/openid/conformance-suite.git .
 
-RUN mvn --batch-mode --quiet -B -Dmaven.test.skip -Dpmd.skip clean package
+RUN mvn --batch-mode --quiet -B -Dmaven.test.skip -DskipTests=true -Dpmd.skip clean package
 
 FROM openjdk:21-jdk-slim-bullseye
 
