@@ -12,11 +12,11 @@ WORKDIR /usr/src/conformance-suite
 
 RUN apt-get -qq update
 RUN apt-get -qq install -y \
-        redir \
-        apache2 \
-        ssl-cert \
-        curl \
-        wget
+      redir \
+      apache2 \
+      ssl-cert \
+      curl \
+      wget
 RUN apt-get -qq clean
 
 COPY --from=builder /usr/src/conformance-suite/target/fapi-test-suite.jar           /server/fapi-test-suite.jar
@@ -24,6 +24,8 @@ COPY conformance-suite/suite-caller.sh                                          
 
 RUN chmod u+x suite-caller.sh
 ENV BASE_URL https://localhost:8443
+ENV DIRECTORYROOTS_URL https://data.sandbox.directory.openbankingbrasil.org.br/roots_directory.jwks
+ENV DIRECTORY_PARTICIPANTS_URL https://data.sandbox.directory.openbankingbrasil.org.br/participants
 ENV MONGODB_HOST mongodb
 
 RUN echo 'Listen 8443' > /etc/apache2/ports.conf \

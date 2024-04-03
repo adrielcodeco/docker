@@ -12,11 +12,11 @@ WORKDIR /usr/src/obb-certification
 
 RUN apt-get -qq update
 RUN apt-get -qq install -y \
-        redir \
-        apache2 \
-        ssl-cert \
-        curl \
-        wget
+      redir \
+      apache2 \
+      ssl-cert \
+      curl \
+      wget
 RUN apt-get -qq clean
 
 COPY --from=builder /usr/src/obb-certification/target/fapi-test-suite.jar           /server/fapi-test-suite.jar
@@ -24,6 +24,8 @@ COPY obb-certification/suite-caller.sh                                          
 
 RUN chmod u+x suite-caller.sh
 ENV BASE_URL https://localhost.emobix.co.uk:8443
+ENV DIRECTORYROOTS_URL https://data.sandbox.directory.openbankingbrasil.org.br/roots_directory.jwks
+ENV DIRECTORY_PARTICIPANTS_URL https://data.sandbox.directory.openbankingbrasil.org.br/participants
 
 RUN echo 'Listen 8443' > /etc/apache2/ports.conf \
       && a2enmod headers proxy proxy_http rewrite ssl \
